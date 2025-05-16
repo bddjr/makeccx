@@ -63,6 +63,14 @@ pnpm build
 ```
 ````
 
+11. 使用 Git 提交并推送。  
+    您可以使用 VSCode 左侧的 “源代码管理” 完成操作，也可以手动运行以下命令  
+```
+git add .
+git commit -m "此处填写commit的标题"
+git push
+```
+
 ---
 
 ## 有何不同
