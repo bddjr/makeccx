@@ -4,11 +4,11 @@
 
 
 // ============================================
-// 测试版版本号例如（结尾是日期缩写）: 
+// 测试版版本号例如（结尾是日期缩写，时区UTC+8）: 
 // dev-1.0.0-250515
 // 正式版版本号例如: 
 // 1.0.0
-const version = "1.0.0"
+const version = "dev-1.0.1-250516"
 
 console.log(`makeccx ${version}`)
 
@@ -206,9 +206,12 @@ const outputLocale = (name: string, content: any): void => {
     }
 }
 
+let has_en_json = false
 for (const name of fs.readdirSync(config.path.src.locales)) {
     if (!name.endsWith('.json'))
         continue
+    if (name === 'en.json')
+        has_en_json = true
 
     interface srcType {
         [key: string]: string | srcType
@@ -241,6 +244,9 @@ for (const name of fs.readdirSync(config.path.src.locales)) {
     if (config.logLocales)
         console.log(name, dist)
     outputLocale(name, JSON.stringify(dist))
+}
+if (!has_en_json) {
+    console.warn("⚠ 警告：缺少 locales/en.json 文件，这可能会导致在其它语言无法正常显示！")
 }
 
 
