@@ -50,7 +50,7 @@ pnpm build
 
 10. 将 `README.md` 清空，然后重写为如下格式
 
-````
+````md
 # Example
 简单介绍一下扩展。  
 
