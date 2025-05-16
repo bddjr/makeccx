@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "lib": [
+            "ESNext",
+            "DOM"
+        ],
+        "skipLibCheck": false,
+        "noEmit": true,
+        "allowSyntheticDefaultImports": true,
+        "checkJs": false,
+    },
+    "include": [
+        "src"
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "NodeNext",
+        "moduleResolution": "nodenext",
+        "skipLibCheck": true,
+        "lib": [
+            "ESNext"
+        ],
+        "allowSyntheticDefaultImports": true,
+        "checkJs": false,
+        "declaration": false,
+        "outDir": "../node_modules/.makeccx"
+    },
+    "include": [
+        "makeccx.ts"
+    ]
+}

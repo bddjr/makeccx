@@ -1,0 +1,23 @@
+{
+    "name": "ClipCC Extension",
+    "description": "description",
+    "hello": {
+        "": "Hello",
+        "hello": "Say hello",
+        "log": "Print log",
+        "abc": {
+            "": "abc[a]",
+            "a": {
+                "item1": "a",
+                "item2": "b",
+                "item3": "c"
+            }
+        },
+        "typeof": "typeof[a]"
+    },
+    "boolean": {
+        "": "boolean",
+        "boolean": "[a]",
+        "equal": "[a]==[b]"
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "name": "ClipCC 扩展",
+    "description": "介绍",
+    "hello": {
+        "": "你好",
+        "hello": "说你好",
+        "log": "打印日志",
+        "abc": {
+            "": "abc[a]",
+            "a": {
+                "item1": "a",
+                "item2": "b",
+                "item3": "c"
+            }
+        },
+        "typeof": "[a]的类型"
+    },
+    "boolean": {
+        "": "布尔值",
+        "boolean": "[a]",
+        "equal": "[a]==[b]"
+    }
+}
