@@ -21,7 +21,7 @@
 4. 按照规范命名仓库，例如 `clipcc-extension-example` 。  
 
 5. 使用 `git clone` 将仓库下载到本地。  
-   请将右侧网址替换为您的仓库的网址。
+
 ```
 git clone <此处填写仓库的网址>
 ```
@@ -42,19 +42,22 @@ git clone <此处填写仓库的网址>
 pnpm i
 ```
 
-9. 运行以下命令构建，结果在 `dist` 文件夹。
+9. 运行以下命令构建 `ccx` 文件，结果在 `dist` 文件夹。
 
 ```
 pnpm build
 ```
 
 10. 将 `README.md` 清空，然后重写为如下格式
+
 ````
-# 扩展标题
-简单介绍以下扩展。  
+# Example
+简单介绍一下扩展。  
+
+## 下载并构建扩展
 ```
 git clone <此处填写仓库的网址>
-cd clipcc-extension-example
+cd <此处填写仓库名称>
 pnpm i
 pnpm build
 ```
