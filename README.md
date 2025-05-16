@@ -2,7 +2,7 @@
 
 # makeccx
 
-🚀 更好的 ClipCC 扩展开发框架，基于 esbuild + TypeScript 。
+🚀 更好的 ClipCC 扩展开发框架，基于 [esbuild](https://esbuild.github.io/) + [TypeScript](https://www.typescriptlang.org/zh/) 。
 
 ## 开始
 
@@ -121,11 +121,13 @@ defineBlock({
 }
 ```
 
-- 类型结构略有更改，详见 [src/global.d.ts](src/global.d.ts)
+- 语法略有更改，参考类型文件 [src/global.d.ts](src/global.d.ts)
 
-- 构建器使用 esbuild 构建代码，JSZip 创建 `ccx` 文件，构建过程不经过 `build` 文件夹。
+- 使用 [esbuild](https://esbuild.github.io/) 构建代码，使用 [JSZip](https://stuk.github.io/jszip/) 创建 `ccx` 文件，构建过程不经过 `build` 文件夹。
 
-- 自动包含 [LICENSE.txt](LICENSE.txt) 文件，遵守 MIT 许可证。
+- 结果不包含整个 `assets` 文件夹，只根据 `src/info.json` 的 `icon` 属性和 `inset_icon` 属性，添加对应的文件。
+
+- 结果自动包含 [LICENSE.txt](LICENSE.txt) 文件，遵守 MIT 许可证。
 
 如果想了解更多不同的地方，请看代码。
 
@@ -133,7 +135,7 @@ defineBlock({
 
 ## 结尾
 
-您可以随意更改 `src` 文件夹的内容，它们不会影响构建器本身。
+您可以根据自己的喜好，随意更改 `src` 文件夹的内容，它们不会影响构建器本身。  
 
 本项目的 `src` 文件夹内容略有更改，[ClipCC 官方文档](https://doc.codingclip.com/zh-cn/category/for-developers)仅供参考，请以实际情况为准。
 
