@@ -246,7 +246,7 @@ for (const name of fs.readdirSync(config.path.src.locales)) {
     outputLocale(name, JSON.stringify(dist))
 }
 if (!has_en_json) {
-    console.warn("⚠ 警告：缺少 locales/en.json 文件，这可能会导致在其它语言无法正常显示！")
+    console.warn("⚠ 警告：缺少 locales/en.json 文件，这可能会导致其它语言无法正常显示！")
 }
 
 
