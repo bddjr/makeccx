@@ -4,6 +4,7 @@ import { id as ccxID } from "./info.json"
 
 import { category_hello } from './categories/hello/hello'
 import { category_boolean } from './categories/boolean/boolean'
+import { logBlockError } from './utils/log-block-error'
 
 
 const globalColor: string = '#66CCFF'
@@ -31,7 +32,14 @@ export const categories: {
             messageId: blockID,
             categoryId: cid,
             type: myBlock.type,
-            function: myBlock.function,
+            function(args: any, util: BlockFuncUtil) {
+                try {
+                    return myBlock.function(args, util)
+                } catch (e) {
+                    logBlockError(e, util)
+                }
+                return ''
+            },
         }
         if (typeof myBlock.option === 'object') {
             out.option = myBlock.option
