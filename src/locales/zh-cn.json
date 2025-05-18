@@ -3,6 +3,7 @@
     "description": "介绍",
     "hello": {
         "": "你好",
+        "github": "Github",
         "hello": "说你好",
         "log": "打印日志",
         "abc": {
