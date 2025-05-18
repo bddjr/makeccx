@@ -3,6 +3,7 @@
     "description": "description",
     "hello": {
         "": "Hello",
+        "github": "Github",
         "hello": "Say hello",
         "log": "Print log",
         "abc": {

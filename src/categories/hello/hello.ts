@@ -1,5 +1,6 @@
 import { type } from "clipcc-extension"
 import defineBlock from "../../utils/define-block"
+import { myConfirm } from "../../utils/my-confirm"
 
 const categoryID: string = 'hello'
 const color: string = '' // Use global color
@@ -7,6 +8,15 @@ const color: string = '' // Use global color
 
 
 const blocks: MyBlock<BlockParams>[] = [
+    defineBlock({
+        id: 'github',
+        type: undefined,
+        async function(args, util) {
+            const url = "https://github.com/bddjr/makeccx"
+            if (await myConfirm('', url))
+                open(url)
+        }
+    }),
     defineBlock({
         id: 'hello',
         type: type.BlockType.REPORTER,
