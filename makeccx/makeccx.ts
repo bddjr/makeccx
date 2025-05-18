@@ -5,7 +5,7 @@
 
 // ============================================
 
-const version = "1.0.2"
+const version = "1.0.3"
 
 console.log(`makeccx ${version}`)
 
@@ -116,7 +116,7 @@ if (!checkFileName(outputName)) {
 }
 const pathDistBeforeZip = path.posix.join(config.path.dist._, outputName)
 const pathDistCcx = pathDistBeforeZip + "." + config.output.ext
-console.log(pathDistCcx + '\n')
+console.log(pathDistCcx)
 
 
 // ============================================
@@ -261,9 +261,15 @@ if (fs.existsSync(config.path.src.settings)) {
 // ============================================
 // Write:
 
-fs.writeFileSync(pathDistCcx, await ccx.generateAsync({
+const outFile = await ccx.generateAsync({
     type: 'uint8array',
     compression: 'DEFLATE',
     compressionOptions: { level: 9 },
     platform: 'UNIX',
-}))
+})
+
+console.log(`${Math.ceil(outFile.length / 1024 * 100) / 100} KiB`)
+
+fs.writeFileSync(pathDistCcx, outFile)
+
+console.log()
