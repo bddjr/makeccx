@@ -38,9 +38,9 @@ const ccxInnerPath = {
     main: "main.js",
     info: "info.json",
     settings: "settings.json",
-    locales: "locales",
-    license: "LICENSE",
-    icon: "cover", // 需补充文件后缀
+    locales: "locales", // 文件夹
+    license: "LICENSE", // 需补充文件后缀
+    icon: "cover",      // 需补充文件后缀
     inset_icon: "icon", // 需补充文件后缀
 }
 
@@ -314,7 +314,10 @@ if (config.path.license) {
     // 找到文件了？
     if (readPath) {
         // 写入
-        addFile(ccxInnerPath.license, fs.readFileSync(readPath))
+        addFile(
+            ccxInnerPath.license + path.extname(readPath),
+            fs.readFileSync(readPath)
+        )
     }
 }
 
