@@ -295,18 +295,18 @@ if (config.path.license) {
         // 没找到？
         if (!readPath) {
             const ls = fs.readdirSync('./')
+            // 尝试查找文件名开头为LICENSE的文件（不分大小写）
             for (const name of ls) {
-                // 尝试查找文件名开头为LICENSE的文件（不分大小写）
                 if (/^LICENSE/i.test(name) && fs.statSync(name).isFile()) {
                     readPath = name
                     break
                 }
-                // 尝试查找文件名包含LICENSE的文件（不分大小写）
-                for (const name of ls) {
-                    if (/LICENSE/i.test(name) && fs.statSync(name).isFile()) {
-                        readPath = name
-                        break
-                    }
+            }
+            // 尝试查找文件名包含LICENSE的文件（不分大小写）
+            for (const name of ls) {
+                if (/LICENSE/i.test(name) && fs.statSync(name).isFile()) {
+                    readPath = name
+                    break
                 }
             }
         }
