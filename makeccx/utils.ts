@@ -8,7 +8,9 @@ export function cutPathPrefix(str: string): string {
 }
 
 export function appendID(left: string, right: string): string {
-    if (right === "")
+    left += ''
+    right += ''
+    if (right == "")
         return left
     if (!left.endsWith('.'))
         left += '.'

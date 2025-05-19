@@ -1,5 +1,7 @@
 export function appendID(left: string, right: string) {
-    if (right === "")
+    left += ''
+    right += ''
+    if (right == "")
         return left
     if (!left.endsWith('.'))
         left += '.'
