@@ -1,6 +1,7 @@
 {
   "name": "makeccx",
   "version": "1.1.0",
+  "author": "bddjr",
   "packageManager": "npm",
   "type": "module",
   "main": "./makeccx/dist/export.js",
