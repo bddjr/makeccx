@@ -1,19 +1,50 @@
 {
-  "private": true,
+  "name": "makeccx",
+  "version": "1.1.0",
+  "packageManager": "npm",
   "type": "module",
+  "main": "./makeccx/dist/export.js",
+  "types": "./makeccx/dist/export.d.ts",
+  "bin": {
+    "makeccx": "./makeccx/dist/bin.js"
+  },
+  "files": [
+    "makeccx/dist",
+    "src",
+    ".vscode",
+    ".github/workflows",
+    ".gitattributes",
+    ".gitignore",
+    "template.makeccx.config.ts",
+    "template.package.json",
+    "tsconfig.json",
+    "tsconfig.src.json",
+    "tsconfig.makeccx.json"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "clipcc",
+    "extension",
+    "clipcc-extension",
+    "ccx",
+    "ccext",
+    "makeccx"
+  ],
   "scripts": {
     "build": "run-p typecheck build-only",
     "typecheck": "tsc",
-    "build-only": "tsc --project makeccx && node node_modules/.makeccx/makeccx/makeccx.js"
+    "build-only": "rimraf makeccx/dist/ && tsc --project makeccx && node makeccx/dist/builder.js"
   },
-  "license": "MIT",
   "dependencies": {
-    "@types/node": ">=22.15.18",
     "clipcc-extension": "^0.2.0",
     "esbuild": ">=0.25.4",
     "jszip": ">=3.10.1",
-    "npm-run-all": "^4.1.5",
-    "rimraf": ">=6.0.1",
+    "rimraf": ">=6.0.1"
+  },
+  "devDependencies": {
+    "makeccx": "file:./",
+    "@types/node": ">=22.15.18",
+    "npm-run-all": ">=4.1.5",
     "typescript": ">=5.8.3"
   }
 }

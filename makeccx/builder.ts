@@ -5,7 +5,7 @@
 
 // ============================================
 
-const version = "1.0.3"
+const version = "1.1.0"
 
 console.log(`makeccx ${version}`)
 
@@ -15,79 +15,112 @@ console.log(`makeccx ${version}`)
 
 import fs from 'node:fs'
 import path from 'node:path'
-import url from 'node:url'
+import { pathToFileURL } from 'node:url'
 
 import esbuild from 'esbuild'
 import JSZip from 'jszip'
 import { rimrafSync } from 'rimraf'
 import { type } from 'clipcc-extension'
 
-import { config } from '../makeccx.config.js'
+import { Config } from './export.js'
+import {
+    appendID,
+    checkFileName,
+    filenameAntiChar,
+    mustStartsWithDotSlash
+} from './utils.js'
 
 
 // ============================================
-// Set Config:
+// Get Config:
 
-config.output.ext = config.output.ext.replace(/^\./, '')
-
-
-// ============================================
-// Functions:
-
-function cutPathPrefix(str: string): string {
-    const prefix = path.resolve() + path.sep
-    if (str.startsWith(prefix))
-        return str.slice(prefix.length)
-    return str
+const ccxInnerPath = {
+    main: "main.js",
+    info: "info.json",
+    settings: "settings.json",
+    locales: "locales",
+    license: "LICENSE",
+    icon: "cover", // 需补充文件后缀
+    inset_icon: "icon", // 需补充文件后缀
 }
 
-function appendID(left: string, right: string): string {
-    if (right === "")
-        return left
-    if (!left.endsWith('.'))
-        left += '.'
-    if (right.startsWith(left))
-        return right
-    return left + right
-}
-
-const filenameAntiChar = '\\/:*?"<>|'
-
-function checkFileName(filename: string): boolean {
-    for (const i of filename) {
-        if (filenameAntiChar.includes(i))
-            return false
+const config = await (async () => {
+    const extList = ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs']
+    let name = ''
+    for (const ext of extList) {
+        const thisName = 'makeccx.config.' + ext
+        if (fs.existsSync(thisName)) {
+            name = thisName
+            break
+        }
     }
-    return true
-}
+    const config: Config = {}
+    if (name) {
+        const outdir = './node_modules/.makeccx'
+        const outName = 'config'
+        const outNameWithExt = outName + '.js'
+        const outPath = path.posix.join(outdir, outNameWithExt)
+        esbuild.buildSync({
+            entryPoints: [{
+                in: path.resolve(name),
+                out: outName
+            }],
+            outdir: path.resolve(outdir),
+            bundle: true,
+            minify: false,
+            write: true,
+            platform: 'node',
+            format: 'esm',
+        })
+        const jsExport = await import(pathToFileURL(outPath).href)
+        Object.assign(config, jsExport.default)
+    }
 
-function fileURLToUnixPath(p: string): string {
-    return p.replace(/^file:\/+(.:\/)?/, '/')
-}
+    config.clearDist ??= false
+    config.outputFilesBeforeZip ??= false
+    config.logLocales ??= false
 
+    config.path ??= {}
+    config.path.main ??= "src/main.ts"
+    config.path.locales ??= "src/locales"
+    config.path.info ??= "src/info.json"
+    config.path.settings ??= "src/settings.json"
+    config.path.dist ??= "dist"
+    config.path.outputName ??= (info: type.ExtensionInfo) => `${info.id}@${info.version}`
+    config.path.outputExt ??= "ccx"
+    config.path.outputExt = config.path.outputExt.replace(/^\./, '')
+    config.path.license ||= true
 
-// ============================================
-// Template CJS:
+    config.esbuild ??= {}
+    config.esbuild.stdin ??= {
+        resolveDir: './',
+        loader: 'js',
+        // 自动适配 ESM 或 CJS
+        contents: `
+var r = require(${JSON.stringify(mustStartsWithDotSlash(config.path.main))})
+module.exports = r.__esModule ? r.default : r
+`,
+    }
+    config.esbuild.outbase ??= './'
+    config.esbuild.minify ??= true
+    config.esbuild.bundle ??= true
+    config.esbuild.format ??= 'cjs'
+    config.esbuild.charset ??= 'utf8'
+    config.esbuild.write ??= false
+    config.esbuild.alias ??= {}
+    config.esbuild.alias["clipcc-extension"] ??= `data:text/javascript,module.exports=self.ClipCCExtension`
+    config.esbuild.target ??= 'esnext'
 
-const pathMakeccxMain = url.fileURLToPath(import.meta.resolve("./module.exports.cjs"))
+    return config
+})()
 
-const pathMakeccxCCE = url.fileURLToPath(import.meta.resolve("./clipcc-extension.cjs"))
-
-fs.writeFileSync(pathMakeccxMain, `module.exports=require(${JSON.stringify(
-    path.posix.relative(
-        fileURLToUnixPath(import.meta.resolve("./")),
-        config.path.src.main
-    )
-)}).default`)
-
-fs.writeFileSync(pathMakeccxCCE, `module.exports=self.ClipCCExtension`)
 
 
 // ============================================
 // Info:
 
 const info = JSON.parse(
-    fs.readFileSync(config.path.src.info).toString()
+    fs.readFileSync(config.path.info).toString()
 ) as type.ExtensionInfo
 
 info.icon = info.icon.replaceAll('\\', '/')
@@ -109,44 +142,36 @@ if (/\.\.|^\.|\.$/.test(info.id) || !/^[a-zA-Z0-9_\-\.]+$/.test(info.id)) {
 // ============================================
 // CCX Path:
 
-const outputName = config.output.name(info)
+const outputName = config.path.outputName(info)
 if (!checkFileName(outputName)) {
     console.error(`× 错误：文件名不能包含下列任何字符：${filenameAntiChar}\n`)
     process.exit(1)
 }
-const pathDistBeforeZip = path.posix.join(config.path.dist._, outputName)
-const pathDistCcx = pathDistBeforeZip + "." + config.output.ext
+const pathDistBeforeZip = path.posix.join(config.path.dist, outputName)
+const pathDistCcx = pathDistBeforeZip + "." + config.path.outputExt
+
 console.log(pathDistCcx)
+
+if (fs.existsSync(pathDistCcx))
+    fs.rmSync(pathDistCcx)
 
 
 // ============================================
 // ESBuild:
 
-const outputMain = esbuild.buildSync({
-    entryPoints: [pathMakeccxMain],
-    outbase: './',
-    outfile: config.output.main,
-    minify: config.minify,
-    bundle: config.bundle,
-    format: 'cjs',
-    charset: 'utf8',
-    write: false,
-    alias: {
-        "clipcc-extension": path.resolve(pathMakeccxCCE),
-    },
-    target: config.target,
-})
+const outputMain = esbuild.buildSync(config.esbuild)
 
 
 // ============================================
 // Make Dist Dir:
 
 if (config.clearDist) {
-    rimrafSync(config.path.dist._)
+    rimrafSync(config.path.dist)
 }
-if (!fs.existsSync(config.path.dist._)) {
-    fs.mkdirSync(config.path.dist._)
+if (!fs.existsSync(config.path.dist)) {
+    fs.mkdirSync(config.path.dist)
 }
+
 rimrafSync(pathDistBeforeZip)
 if (config.outputFilesBeforeZip) {
     fs.mkdirSync(pathDistBeforeZip)
@@ -171,40 +196,44 @@ const addFile = (name: string, content: any): void => {
 }
 
 // main
-for (const f of outputMain.outputFiles) {
-    const p = cutPathPrefix(f.path)
-    addFile(p, outputMain.outputFiles[0].text)
-}
+addFile(ccxInnerPath.main, outputMain.outputFiles[0].text)
 
 // info
-addFile(config.output.info, JSON.stringify(info))
-
 if (info.icon) {
-    addFile(info.icon, fs.readFileSync(path.join(config.path.src._, info.icon)))
+    const assetsPath = info.icon
+    const innerPath = ccxInnerPath.icon + path.extname(assetsPath)
+    const readPath = path.join(path.dirname(config.path.info), assetsPath)
+    addFile(innerPath, fs.readFileSync(readPath))
+    info.icon = innerPath
 }
 if (info.inset_icon) {
-    addFile(info.inset_icon, fs.readFileSync(path.join(config.path.src._, info.inset_icon)))
+    const assetsPath = info.inset_icon
+    const innerPath = ccxInnerPath.inset_icon + path.extname(assetsPath)
+    const readPath = path.join(path.dirname(config.path.info), assetsPath)
+    addFile(innerPath, fs.readFileSync(readPath))
+    info.inset_icon = innerPath
 }
+addFile(ccxInnerPath.info, JSON.stringify(info))
 
 
 // locales
-const ccxLocales = ccx.folder(config.output.locales)!
+const ccxLocales = ccx.folder(ccxInnerPath.locales)!
 
 if (config.outputFilesBeforeZip) {
-    fs.mkdirSync(path.join(pathDistBeforeZip, config.output.locales))
+    fs.mkdirSync(path.join(pathDistBeforeZip, ccxInnerPath.locales))
 }
 
 const outputLocale = (name: string, content: any): void => {
     name = name.replaceAll('\\', '/')
     ccxLocales.file(name, content, { optimizedBinaryString: true })
     if (config.outputFilesBeforeZip) {
-        name = path.join(pathDistBeforeZip, config.output.locales, name)
+        name = path.join(pathDistBeforeZip, ccxInnerPath.locales, name)
         fs.writeFileSync(name, content)
     }
 }
 
 let has_en_json = false
-for (const name of fs.readdirSync(config.path.src.locales)) {
+for (const name of fs.readdirSync(config.path.locales)) {
     if (!name.endsWith('.json'))
         continue
     if (name === 'en.json')
@@ -217,7 +246,7 @@ for (const name of fs.readdirSync(config.path.src.locales)) {
         [key: string]: string
     }
 
-    const srcPath = path.join(config.path.src.locales, name)
+    const srcPath = path.join(config.path.locales, name)
     const src = JSON.parse(fs.readFileSync(srcPath).toString()) as srcType
     const dist = {} as distType
     const flat = (id: string, content: string | srcType): void => {
@@ -248,13 +277,51 @@ if (!has_en_json) {
 
 
 // license
-if (config.copyLicense) {
-    addFile(config.path.license._, fs.readFileSync(config.path.license._))
+if (config.path.license) {
+    let readPath = ''
+    if (typeof config.path.license === "string") {
+        // 已指定文件位置
+        readPath = config.path.license
+    } else {
+        // 尝试按照不同后缀的优先级查找
+        const extList = ['', '.txt', '.md', '.html', '.htm']
+        for (const ext of extList) {
+            const name = 'LICENSE' + ext
+            if (fs.existsSync(name) && fs.statSync(name).isFile()) {
+                readPath = name
+                break
+            }
+        }
+        // 没找到？
+        if (!readPath) {
+            const ls = fs.readdirSync('./')
+            for (const name of ls) {
+                // 尝试查找文件名开头为LICENSE的文件（不分大小写）
+                if (/^LICENSE/i.test(name) && fs.statSync(name).isFile()) {
+                    readPath = name
+                    break
+                }
+                // 尝试查找文件名包含LICENSE的文件（不分大小写）
+                for (const name of ls) {
+                    if (/LICENSE/i.test(name) && fs.statSync(name).isFile()) {
+                        readPath = name
+                        break
+                    }
+                }
+            }
+        }
+    }
+    // 找到文件了？
+    if (readPath) {
+        // 写入
+        addFile(ccxInnerPath.license, fs.readFileSync(readPath))
+    }
 }
 
-// settings
-if (fs.existsSync(config.path.src.settings)) {
-    addFile(config.output.settings, fs.readFileSync(config.path.src.settings))
+// （可选）settings
+if (fs.existsSync(config.path.settings)) {
+    const settings = JSON.parse(fs.readFileSync(config.path.settings).toString())
+    addFile(ccxInnerPath.settings, JSON.stringify(settings))
 }
 
 

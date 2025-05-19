@@ -2,13 +2,16 @@
     "compilerOptions": {
         "module": "NodeNext",
         "moduleResolution": "nodenext",
-        "skipLibCheck": true,
         "lib": [
             "ESNext"
         ],
+        "skipLibCheck": false,
+        "noEmit": true,
         "allowSyntheticDefaultImports": true,
         "checkJs": false,
-        "declaration": true,
-        "outDir": "./dist/"
-    }
+        "isolatedModules": true
+    },
+    "include": [
+        "makeccx.config.*"
+    ]
 }
