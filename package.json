@@ -13,7 +13,7 @@
     "makeccx/dist",
     "src",
     ".vscode",
-    ".github/workflows",
+    ".github/workflows/main.yml",
     ".gitattributes",
     ".gitignore",
     "template.makeccx.config.ts",
