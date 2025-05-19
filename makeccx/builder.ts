@@ -253,7 +253,7 @@ for (const name of fs.readdirSync(config.path.locales)) {
         if (typeof content === 'string') {
             // string
             dist[id] = content
-        } else if (typeof content === 'object' && !Array.isArray(content)) {
+        } else if (typeof content === 'object') {
             // object
             for (const key in content) {
                 flat(appendID(id, key), content[key])
