@@ -105,7 +105,7 @@ defineBlock({
 1. 安装依赖
 
 ```
-npm i makeccx --save-dev
+pnpm i makeccx --save-dev
 ```
 
 2. 修改 `package.json` 的 `scripts` 字段
