@@ -1,19 +1,47 @@
 {
-  "private": true,
+  "name": "makeccx",
+  "version": "1.1.0",
+  "author": "bddjr",
+  "packageManager": "npm@10.8.3",
   "type": "module",
-  "scripts": {
-    "build": "run-p typecheck build-only",
-    "typecheck": "tsc",
-    "build-only": "tsc --project makeccx && node node_modules/.makeccx/makeccx/makeccx.js"
+  "main": "./makeccx/dist/export.js",
+  "types": "./makeccx/dist/export.d.ts",
+  "bin": {
+    "makeccx": "makeccx/dist/bin.js"
+  },
+  "files": [
+    "makeccx/dist",
+    "LICENSE.md"
+  ],
+  "engines": {
+    "node": ">=v20.8.0"
   },
   "license": "MIT",
+  "keywords": [
+    "clipcc",
+    "extension",
+    "clipcc-extension",
+    "ccx",
+    "ccext",
+    "makeccx"
+  ],
+  "scripts": {
+    "build": "tsc && rimraf makeccx/dist/ && tsc --project makeccx && node makeccx/dist/bin.js build",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/makeccx/makeccx.git"
+  },
   "dependencies": {
-    "@types/node": ">=22.15.18",
     "clipcc-extension": "^0.2.0",
     "esbuild": ">=0.25.4",
     "jszip": ">=3.10.1",
-    "npm-run-all": "^4.1.5",
-    "rimraf": ">=6.0.1",
+    "rimraf": ">=6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": ">=22.15.18",
+    "makeccx": "file:./",
     "typescript": ">=5.8.3"
   }
 }
