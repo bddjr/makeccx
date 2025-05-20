@@ -12,6 +12,9 @@
   "files": [
     "makeccx/dist"
   ],
+  "engines": {
+    "node": ">=v20.8.0"
+  },
   "license": "MIT",
   "keywords": [
     "clipcc",
