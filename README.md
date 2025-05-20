@@ -94,6 +94,8 @@ defineBlock({
 
 - 结果自动包含 LICENSE 文件（如果有）。
 
+- 自带 `.github/workflows/main.yml` 文件，构建结果可以直接在 `actions` 里下载。
+
 如果想了解更多不同的地方，请看代码。
 
 ---
