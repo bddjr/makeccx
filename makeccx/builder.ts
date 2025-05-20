@@ -81,7 +81,7 @@ const config = await (async () => {
     config.logLocales ??= false
 
     config.path ??= {}
-    config.path.main ??= "src/main.ts"
+    config.path.main ??= "src/main"
     config.path.locales ??= "src/locales"
     config.path.info ??= "src/info.json"
     config.path.settings ??= "src/settings.json"

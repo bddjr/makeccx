@@ -24,8 +24,8 @@ export interface Config {
     /** 文件路径 */
     path?: {
         /**
-         * 扩展主程序文件位置。  
-         * @default "src/main.ts"
+         * 扩展主程序文件位置，可以不写后缀。  
+         * @default "src/main"
          */
         main?: string
 
