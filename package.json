@@ -29,6 +29,10 @@
     "build": "tsc && rimraf makeccx/dist/ && tsc --project makeccx && node makeccx/dist/bin.js build",
     "prepublishOnly": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/makeccx/makeccx.git"
+  },
   "dependencies": {
     "clipcc-extension": "^0.2.0",
     "esbuild": ">=0.25.4",
