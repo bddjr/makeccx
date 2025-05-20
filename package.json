@@ -27,7 +27,7 @@
   "scripts": {
     "build": "run-p typecheck build-only",
     "typecheck": "tsc",
-    "build-only": "rimraf makeccx/dist/ && tsc --project makeccx && makeccx build",
+    "build-only": "rimraf makeccx/dist/ && tsc --project makeccx && npm i ./ && makeccx build",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
