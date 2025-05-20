@@ -10,7 +10,8 @@
     "makeccx": "makeccx/dist/bin.js"
   },
   "files": [
-    "makeccx/dist"
+    "makeccx/dist",
+    "LICENSE.md"
   ],
   "engines": {
     "node": ">=v20.8.0"
