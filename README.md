@@ -6,74 +6,39 @@
 
 ## 开始
 
-1. 确认您正在访问 https://github.com/bddjr/makeccx ，而不是别人的扩展仓库。
+1. 确保电脑已安装以下软件
 
-2. 确保电脑已安装以下软件
-
-   > [Git](https://git-scm.com/)  
    > [Node.js](https://nodejs.org/)  
-   > [pnpm](https://pnpm.io/zh/)  
    > [VSCode](https://code.visualstudio.com/)  
 
-3. 点击右上角的绿色 `Use this template` 按钮，  
-   然后点击 `Create a new repository` 创建仓库。  
-   
-   请按照规范命名仓库，例如 `clipcc-extension-example` 。  
-
-4. 使用 `git clone` 命令，将仓库下载到本地。  
+2. 新建项目。  
+   在文件夹里打开终端，运行下方命令
 
 ```
-git clone <此处填写仓库的网址>
+npm create makeccx@latest
 ```
 
-5. 使用 VSCode 打开文件夹。  
-   请安装扩展 `JavaScript and TypeScript Nightly` ，确保正常使用 TypeScript 。  
-
-6. 请按照规范更改 [src/info.json](src/info.json) 文件。
-
-7. 在 VSCode 里新建终端，然后运行以下命令安装依赖。
+3. 安装依赖。  
+   使用 VSCode 打开文件夹，然后新建终端，运行下方命令
 
 ```
-pnpm i
+npm i 
 ```
 
-8. 运行以下命令构建 `ccx` 文件，结果在 `dist` 文件夹。
+4. 构建 `ccx` 文件。  
+   运行下方命令，然后在 `dist` 文件夹查看构建结果。
 
 ```
-pnpm build
-```
-
-9. 将 `README.md` 清空。  
-   您可以使用以下格式重写 `README.md`。  
-
-````md
-# Example
-简单介绍一下扩展。  
-
-## 下载并构建扩展
-```
-git clone <此处填写仓库的网址>
-cd <此处填写文件夹名称>
-pnpm i
-pnpm build
-```
-````
-
-10. 使用 Git 提交并推送。  
-    您可以使用 VSCode 左侧的 “源代码管理” 完成操作，也可以手动运行以下命令  
-```
-git add .
-git commit -m "此处填写commit的标题"
-git push
+npm run build
 ```
 
 ---
 
 ## 配置
 
-构建器配置参数在 [makeccx.config.ts](makeccx.config.ts) 文件。  
+构建器配置参数在 [`makeccx.config.ts`](makeccx.config.ts) 或 [`makeccx.config.js`](makeccx.config.js) 文件。  
 
-请按照指定的类型修改选项，不得删除任何一项。  
+有关配置参数，请参考 [`makeccx/export.ts`](makeccx/export.ts) 。
 
 ---
 
@@ -121,21 +86,70 @@ defineBlock({
 }
 ```
 
-- 语法略有更改，参考类型文件 [src/global.d.ts](src/global.d.ts)
+- 语法略有更改，参考类型文件 [`src/global.d.ts`](src/global.d.ts)
 
 - 使用 [esbuild](https://esbuild.github.io/) 构建代码，使用 [JSZip](https://stuk.github.io/jszip/) 创建 `ccx` 文件，构建过程不经过 `build` 文件夹。
 
 - 结果不包含整个 `assets` 文件夹，只根据 `src/info.json` 的 `icon` 属性和 `inset_icon` 属性，添加对应的文件。
 
-- 结果自动包含 [LICENSE.txt](LICENSE.txt) 文件，遵守 MIT 许可证。
+- 结果自动包含 LICENSE 文件（如果有）。
 
 如果想了解更多不同的地方，请看代码。
 
 ---
 
-## 结尾
+## 从旧版迁移
 
-您可以根据自己的喜好，随意更改 `src` 文件夹的内容，它们不会影响构建器本身。  
+### 1.0.*
+
+1. 安装依赖
+
+```
+npm i makeccx --save-dev
+```
+
+2. 修改 `package.json` 的 `scripts` 字段
+
+```json
+  "scripts": {
+    "build": "run-p typecheck build-only",
+    "typecheck": "tsc",
+    "build-only": "makeccx build"
+  },
+```
+
+3. 删除 `makeccx.config.ts` 文件，或重写为以下格式
+
+```js
+import { defineConfig } from 'makeccx'
+
+export default defineConfig({
+
+})
+
+```
+
+4. （可选）删除 `makeccx` 文件夹。
+
+---
+
+## 下载源码，然后构建
+
+```
+git clone https://github.com/makeccx/makeccx
+cd makeccx
+npm i
+npm run build
+
+git clone https://github.com/makeccx/create-makeccx
+cd create-makeccx
+npm i
+npm run build
+```
+
+---
+
+## 结尾
 
 本项目的 `src` 文件夹内容略有更改，[ClipCC 官方文档](https://doc.codingclip.com/zh-cn/category/for-developers)仅供参考，请以实际情况为准。
 

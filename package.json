@@ -2,25 +2,15 @@
   "name": "makeccx",
   "version": "1.1.0",
   "author": "bddjr",
-  "packageManager": "npm",
+  "packageManager": "npm@10.8.3",
   "type": "module",
   "main": "./makeccx/dist/export.js",
   "types": "./makeccx/dist/export.d.ts",
   "bin": {
-    "makeccx": "./makeccx/dist/bin.js"
+    "makeccx": "makeccx/dist/bin.js"
   },
   "files": [
-    "makeccx/dist",
-    "src",
-    ".vscode",
-    ".github/workflows/main.yml",
-    ".gitattributes",
-    ".gitignore",
-    "template.makeccx.config.ts",
-    "template.package.json",
-    "tsconfig.json",
-    "tsconfig.src.json",
-    "tsconfig.makeccx.json"
+    "makeccx/dist"
   ],
   "license": "MIT",
   "keywords": [
@@ -34,7 +24,8 @@
   "scripts": {
     "build": "run-p typecheck build-only",
     "typecheck": "tsc",
-    "build-only": "rimraf makeccx/dist/ && tsc --project makeccx && node makeccx/dist/builder.js"
+    "build-only": "rimraf makeccx/dist/ && tsc --project makeccx && makeccx build",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "clipcc-extension": "^0.2.0",

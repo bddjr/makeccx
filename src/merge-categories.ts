@@ -25,7 +25,7 @@ export const categories: {
 
     const cid = appendID(ccxID, c.id)
 
-    let blocks = c.blocks.filter((b) => (typeof b === 'object')).map(myBlock => {
+    let blocks = c.blocks.filter((b) => (typeof b === 'object')).map((myBlock) => {
         const blockID = appendID(cid, myBlock.id)
         const out: type.BlockPrototype = {
             opcode: blockID,

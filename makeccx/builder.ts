@@ -1,13 +1,8 @@
-// Copyright © 2025 This Extension Author & bddjr & Clip Team
-// License: MIT
-// https://github.com/bddjr/makeccx
-
-
-// ============================================
-
-const version = "1.1.0"
-
-console.log(`makeccx ${version}`)
+/**
+ * @copyright 2025 bddjr & Clip Team
+ * @license MIT
+ * @link https://github.com/bddjr/makeccx
+ */
 
 
 // ============================================
@@ -15,7 +10,7 @@ console.log(`makeccx ${version}`)
 
 import fs from 'node:fs'
 import path from 'node:path'
-import { pathToFileURL } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import esbuild from 'esbuild'
 import JSZip from 'jszip'
@@ -29,6 +24,20 @@ import {
     filenameAntiChar,
     mustStartsWithDotSlash
 } from './utils.js'
+
+
+// ============================================
+// Version:
+
+const { version } = JSON.parse(
+    fs.readFileSync(
+        fileURLToPath(
+            import.meta.resolve('../../package.json')
+        )
+    ).toString()
+)
+
+console.log(`makeccx ${version}`)
 
 
 // ============================================
@@ -89,7 +98,9 @@ const config = await (async () => {
     config.path.outputName ??= (info: type.ExtensionInfo) => `${info.id}@${info.version}`
     config.path.outputExt ??= "ccx"
     config.path.outputExt = config.path.outputExt.replace(/^\./, '')
-    config.path.license ||= true
+    config.path.license ??= true
+    if (config.path.license === '')
+        config.path.license = false
 
     config.esbuild ??= {}
     config.esbuild.stdin ??= {
@@ -134,8 +145,18 @@ console.log()
 // 不推荐使用多个 . 分割 ID，
 // 如有必要，每个 . 之间必须至少有一个合法的字符。
 // 参考文档 https://doc.codingclip.com/zh-cn/developer/structure
-if (/\.\.|^\.|\.$/.test(info.id) || !/^[a-zA-Z0-9_\-\.]+$/.test(info.id)) {
-    console.warn("⚠ 警告：扩展ID不符合规范\n")
+if (/\.\.|^\.|\.$/.test(info.id) || !/^[a-z0-9A-Z_\-\.]+$/.test(info.id)) {
+    console.warn("⚠ 警告：扩展id不符合规范\n")
+} else if (/[A-Z\-]/.test(info.id)) {
+    // 1. `your.extension.id` must be an valid id, 
+    // which only contains a-z, 0-9 and `_`, and is split by `.`. 
+    // To avoid id conflict, a recommended id is `name.extension`, 
+    // containing both your extension name and your own name 
+    // (or your team/organization's name) with lower letters 
+    // (numbers and `_` shouldn't be used if not necessary), 
+    // like `alexcui.random`, `clipteam.community`, etc.
+    // https://www.npmjs.com/package/clipcc-extension-cli
+    console.warn("⚠ 警告：扩展id包含大写字母或横杠，可能不符合规范。参考 https://www.npmjs.com/package/clipcc-extension-cli\n")
 }
 
 

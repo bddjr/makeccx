@@ -16,11 +16,11 @@ declare global {
 
     interface MyBlock<T extends BlockParams> {
         id: string;
-        type: type.BlockType;
+        type: type.BlockType | undefined;
         option?: type.BlockOption;
         branchCount?: number;
         param?: T;
-        function(args?: {
+        function(args: {
             [K in keyof T]: K extends "mutation" ? undefined : (
                 T[K] extends MyParam ? any : never
             )
@@ -29,7 +29,7 @@ declare global {
              * mutation是保留给自制积木的字段，始终返回undefined。  
              */
             mutation: undefined;
-        }, util?: BlockFuncUtil): any
+        }, util: BlockFuncUtil): any
     }
 
     type BlockParams = {
@@ -39,6 +39,7 @@ declare global {
          * 将undefined输入给扩展加载器会导致加载错误，  
          * 因此需要在加载时忽略undefined。  
          */
+        //@ts-ignore
         mutation?: undefined
     }
 

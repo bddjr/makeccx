@@ -8,7 +8,7 @@
         "skipLibCheck": false,
         "noEmit": true,
         "allowSyntheticDefaultImports": true,
-        "checkJs": false,
+        "checkJs": true,
         "isolatedModules": true
     },
     "include": [
