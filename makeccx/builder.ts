@@ -1,5 +1,5 @@
 /**
- * @copyright 2025 bddjr & Clip Team
+ * @copyright 2025 bddjr
  * @license MIT
  * @link https://github.com/bddjr/makeccx
  */

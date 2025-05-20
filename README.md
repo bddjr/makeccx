@@ -32,6 +32,8 @@ npm i
 npm run build
 ```
 
+5. 扩展的源代码在 `src` 文件夹。
+
 ---
 
 ## 配置
@@ -134,6 +136,8 @@ export default defineConfig({
 ---
 
 ## 下载源码，然后构建
+
+源代码在 `makeccx` 文件夹，而不是 `src` 文件夹。
 
 ```
 git clone https://github.com/makeccx/makeccx

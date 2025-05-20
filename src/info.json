@@ -1,8 +1,8 @@
 {
-    "id": "unknown.test",
+    "id": "unknown.extension",
     "author": "unknown",
     "version": "0.0.1",
-    "icon": "assets/cover.tinypng.png",
+    "icon": "assets/cover.tinypng.webp",
     "inset_icon": "assets/icon.svg",
     "api": 1
 }
