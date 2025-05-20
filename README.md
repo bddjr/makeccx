@@ -114,9 +114,7 @@ pnpm i makeccx --save-dev
 
 ```json
   "scripts": {
-    "build": "run-p typecheck build-only",
-    "typecheck": "tsc",
-    "build-only": "makeccx build"
+    "build": "tsc && makeccx build"
   },
 ```
 
