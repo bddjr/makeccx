@@ -1,6 +1,6 @@
 {
   "name": "makeccx",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "bddjr",
   "packageManager": "npm@10.8.3",
   "type": "module",
@@ -36,6 +36,7 @@
   "dependencies": {
     "clipcc-extension": "^0.2.0",
     "esbuild": ">=0.25.4",
+    "esbuild-plugin-external-node_modules": "^0.0.1",
     "jszip": ">=3.10.1",
     "rimraf": ">=6.0.1"
   },

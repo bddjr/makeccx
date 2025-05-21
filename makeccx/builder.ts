@@ -13,6 +13,7 @@ import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import esbuild from 'esbuild'
+import external_node_modules from 'esbuild-plugin-external-node_modules'
 import JSZip from 'jszip'
 import { rimrafSync } from 'rimraf'
 import { type } from 'clipcc-extension'
@@ -69,7 +70,7 @@ const config = await (async () => {
         const outName = 'config'
         const outNameWithExt = outName + '.js'
         const outPath = path.posix.join(outdir, outNameWithExt)
-        esbuild.buildSync({
+        await esbuild.build({
             entryPoints: [{
                 in: path.resolve(name),
                 out: outName
@@ -80,6 +81,10 @@ const config = await (async () => {
             write: true,
             platform: 'node',
             format: 'esm',
+            charset: 'utf8',
+            plugins: [
+                external_node_modules,
+            ],
         })
         const jsExport = await import(pathToFileURL(outPath).href)
         Object.assign(config, jsExport.default)
