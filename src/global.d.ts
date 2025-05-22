@@ -16,7 +16,12 @@ declare global {
 
     interface MyBlock<T extends BlockParams> {
         id: string;
-        type: type.BlockType | undefined;
+        type: type.BlockType;
+        /**
+         * 在添加该积木之后，添加 COMMAND 类型的积木。  
+         * 该选项仅当 type 属性的值不是 type.BlockType.COMMAND 时有效。  
+         */
+        addCommandAfterThis?: boolean;
         option?: type.BlockOption;
         branchCount?: number;
         param?: T;

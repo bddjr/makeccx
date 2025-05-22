@@ -25,7 +25,7 @@ export const categories: {
 
     const cid = appendID(ccxID, c.id)
 
-    let blocks = c.blocks.filter((b) => (typeof b === 'object')).map((myBlock) => {
+    let blocks = c.blocks.filter((b) => (typeof b === 'object')).flatMap((myBlock) => {
         const blockID = appendID(cid, myBlock.id)
         const out: type.BlockPrototype = {
             opcode: blockID,
@@ -78,6 +78,12 @@ export const categories: {
                 }
                 out.param[key] = outParam
             }
+        }
+        if (myBlock.addCommandAfterThis && myBlock.type !== type.BlockType.COMMAND) {
+            const cmdBlock = Object.assign({}, out)
+            cmdBlock.type = type.BlockType.COMMAND
+            cmdBlock.opcode += '_command'
+            return [out, cmdBlock]
         }
         return out
     })
