@@ -170,7 +170,7 @@ if (/\.\.|^\.|\.$/.test(info.id) || !/^[a-z0-9A-Z_\-\.]+$/.test(info.id)) {
 
 const outputName = config.path.outputName(info)
 if (!checkFileName(outputName)) {
-    console.error(`× 错误：文件名不能包含下列任何字符：${filenameAntiChar}\n`)
+    console.error(`× 错误：文件名无效，不能包含下列任何字符：${filenameAntiChar}\n`)
     process.exit(1)
 }
 const pathDistBeforeZip = path.posix.join(config.path.dist, outputName)
