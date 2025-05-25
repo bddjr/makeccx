@@ -2,7 +2,7 @@
     "id": "unknown.extension",
     "author": "unknown",
     "version": "0.0.1",
-    "icon": "assets/cover.tinypng.webp",
+    "icon": "assets/cover.tinypng.png",
     "inset_icon": "assets/icon.svg",
     "api": 1
 }
