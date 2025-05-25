@@ -46,7 +46,7 @@ declare global {
          */
         //@ts-ignore
         mutation?: undefined
-    }
+    } | MyParam[]
 
     interface BlockFuncUtil {
         currentBlock: {
@@ -97,7 +97,7 @@ declare global {
     interface MyParam {
         type: type.ParameterType;
         defaultValue: DefaultParamValue;
-        menu?: MyMenu;
+        menu?: MyMenu | DynamicMenu;
         field?: boolean;
         shadow?: type.ShadowPrototype;
     }
@@ -120,4 +120,6 @@ declare global {
         id: string
         value: DefaultParamValue
     }
+
+    type DynamicMenu = () => [string, string][]
 }

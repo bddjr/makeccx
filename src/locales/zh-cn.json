@@ -14,7 +14,8 @@
                 "item3": "c"
             }
         },
-        "typeof": "[a]的类型"
+        "typeof": "[a]的类型",
+        "sprite_name": "角色 [a] 名称"
     },
     "boolean": {
         "": "布尔值",

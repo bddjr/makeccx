@@ -1,6 +1,7 @@
 import { type } from "clipcc-extension"
 import defineBlock from "../../utils/define-block"
 import { myConfirm } from "../../utils/my-confirm"
+import { paramSprites } from "../../utils/param-sprites"
 
 const categoryID: string = 'hello'
 const color: string = '' // Use global color
@@ -68,7 +69,17 @@ const blocks: MyBlock<BlockParams>[] = [
         function(args, util): string {
             return typeof args.a
         }
-    })
+    }),
+    defineBlock({
+        id: 'sprite_name',
+        type: type.BlockType.REPORTER,
+        param: {
+            a: paramSprites,
+        },
+        function(args, util): string {
+            return args.a
+        }
+    }),
 ]
 
 

@@ -14,7 +14,8 @@
                 "item3": "c"
             }
         },
-        "typeof": "typeof[a]"
+        "typeof": "typeof[a]",
+        "sprite_name": "sprite [a] name"
     },
     "boolean": {
         "": "boolean",
